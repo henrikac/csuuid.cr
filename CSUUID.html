@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.35.1">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="cssuid">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="cssuid">
+  <title>CSUUID - cssuid 0.1.0</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          cssuid
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" current" data-id="cssuid/CSUUID" data-name="csuuid">
+      <a href="CSUUID.html">CSUUID</a>
+      
+    </li>
+  
+  <li class=" " data-id="cssuid/Time" data-name="time">
+      <a href="Time.html">Time</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">struct</span> CSUUID
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="CSUUID.html">CSUUID</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>This struct wraps up a UUID that encodes a timestamp measured as seconds
+from the epoch (0001-01-01 00:00:00.0 UTC) observed at the location where
+the timestamp was generated, plus nanoseconds in the current second, plus
+6 bytes for unique identification of the source -- this could be an
+IPV4 address with two null bytes, a MAC address, or some other sequence
+that will fit in 6 bytes.</p>
+
+<p>Nanoseconds will fit in an Int32 (4 bytes), but seconds since the epoch
+will not. The current number of seconds leaks a short distance into a
+5th byte, meaning that in this class, it has to be represented by an
+Int64. This is problematic because a UID allows for 16 bytes, so the
+use of 8 for seconds and 4 for nanoseconds leaves only 4 bytes for system
+identification. It also leaves three bytes in the UUID as zeros because 8
+bytes for seconds is a lot of seconds.</p>
+
+<p>One solution is to combine the seconds and the nanoseconds into a single
+Int64 number. This requires math operations to do efficiently:</p>
+
+<pre><code class="language-crystal">(seconds <span class="o">*</span> <span class="n">1000000000</span>) <span class="o">+</span> nanoseconds</code></pre>
+
+<p>and then more math to extract the original numbers in order to reconstruct
+the original timestamp. This leaves 8 bytes for identification or other
+uniqueness information, which is lovely, but the math requirement is less
+lovely.</p>
+
+<p>The other options is to truncate 2 bytes off of the seconds, storing
+6 bytes of seconds data. This leaves 6 bytes for identification.</p>
+
+<p>The current implementation chose option #2, as it is less work to generate
+a UUID if math is not involved.</p>
+
+<p>+-------------+-----------------+------------+
+| nanoseconds |     seconds     | identifier |
+|    0..3     |      4..10      |   11..15   |
++-------------+-----------------+------------+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new(uuid:String)-class-method" class="signature"><strong>.new</strong>(uuid : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new(uuid:UUID%7CCSUUID)-class-method" class="signature"><strong>.new</strong>(uuid : UUID | CSUUID)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new(timestamp:Time,identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(timestamp : Time, identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new(identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method" class="signature"><strong>.new</strong>(identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#extra-class-method" class="signature"><strong>.extra</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#extra=(extra)-class-method" class="signature"><strong>.extra=</strong>(extra)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#identifier-class-method" class="signature"><strong>.identifier</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#identifier=(identifier)-class-method" class="signature"><strong>.identifier=</strong>(identifier)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil)-instance-method" class="signature"><strong>#initialize_impl</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method" class="signature"><strong>#seconds_and_nanoseconds</strong> : Tuple(Int64, Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#timestamp-instance-method" class="signature"><strong>#timestamp</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s-instance-method" class="signature"><strong>#to_s</strong></a>
+        
+          <div class="summary"><p>Returns a string representation of this object.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#utc-instance-method" class="signature"><strong>#utc</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)|String|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(uuid:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(uuid : String)
+
+        <a class="method-permalink" href="#new(uuid:String)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(uuid:UUID|CSUUID)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(uuid : UUID | <a href="CSUUID.html">CSUUID</a>)
+
+        <a class="method-permalink" href="#new(uuid:UUID%7CCSUUID)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(timestamp:Time,identifier:Slice(UInt8)|String|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(timestamp : <a href="Time.html">Time</a>, identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new(timestamp:Time,identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(identifier:Slice(UInt8)|String|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(identifier : Slice(UInt8) | String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new(identifier:Slice(UInt8)%7CString%7CNil=nil)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="extra-class-method">
+      <div class="signature">
+        
+        def self.<strong>extra</strong>
+
+        <a class="method-permalink" href="#extra-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="extra=(extra)-class-method">
+      <div class="signature">
+        
+        def self.<strong>extra=</strong>(extra)
+
+        <a class="method-permalink" href="#extra=(extra)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="identifier-class-method">
+      <div class="signature">
+        
+        def self.<strong>identifier</strong>
+
+        <a class="method-permalink" href="#identifier-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="identifier=(identifier)-class-method">
+      <div class="signature">
+        
+        def self.<strong>identifier=</strong>(identifier)
+
+        <a class="method-permalink" href="#identifier=(identifier)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)|String|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>initialize_impl</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil)
+
+        <a class="method-permalink" href="#initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seconds_and_nanoseconds</strong> : Tuple(Int64, Int32)
+
+        <a class="method-permalink" href="#seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="timestamp-instance-method">
+      <div class="signature">
+        
+        def <strong>timestamp</strong>
+
+        <a class="method-permalink" href="#timestamp-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>
+
+        <a class="method-permalink" href="#to_s-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class Object
+            </div>
+          
+          <p>Returns a string representation of this object.</p>
+
+<p>Descendants must usually <strong>not</strong> override this method. Instead,
+they must override <code>to_s(io)</code>, which must append to the given
+IO object.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="utc-instance-method">
+      <div class="signature">
+        
+        def <strong>utc</strong>
+
+        <a class="method-permalink" href="#utc-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
