@@ -120,10 +120,10 @@ lovely.</p>
 <p>The current implementation chose option #2, as it is less work to generate
 a UUID if math is not involved.</p>
 
-<p>+-------------+-----------------+------------+
+<pre><code class="language-plain">+-------------+-----------------+------------+
 | nanoseconds |     seconds     | identifier |
 |    0..3     |      4..10      |   11..15   |
-+-------------+-----------------+------------+</p>
++-------------+-----------------+------------+</code></pre>
 
 
 
@@ -191,38 +191,6 @@ a UUID if math is not involved.</p>
 
 
 
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#extra-class-method" class="signature"><strong>.extra</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#extra=(extra)-class-method" class="signature"><strong>.extra=</strong>(extra)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#identifier-class-method" class="signature"><strong>.identifier</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#identifier=(identifier)-class-method" class="signature"><strong>.identifier=</strong>(identifier)</a>
-        
-      </li>
-    
-  </ul>
-
 
 
   <h2>
@@ -236,29 +204,30 @@ a UUID if math is not involved.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil)-instance-method" class="signature"><strong>#initialize_impl</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method" class="signature"><strong>#seconds_and_nanoseconds</strong> : Tuple(Int64, Int32)</a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#timestamp-instance-method" class="signature"><strong>#timestamp</strong></a>
+          <div class="summary"><p>This returns a tuple containing the seconds since the epoch as well as the nanoseconds in the current second for the UUID.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_s-instance-method" class="signature"><strong>#to_s</strong></a>
+        <a href="#timestamp:Time-instance-method" class="signature"><strong>#timestamp</strong> : Time</a>
         
-          <div class="summary"><p>Returns a string representation of this object.</p></div>
+          <div class="summary"><p>Return a Time object representing the timestamp encoded into the UUID as local time.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#utc-instance-method" class="signature"><strong>#utc</strong></a>
+        <a href="#to_s:String-instance-method" class="signature"><strong>#to_s</strong> : String</a>
+        
+          <div class="summary"><p>Return the String representation of the UUID.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#utc:Time-instance-method" class="signature"><strong>#utc</strong> : Time</a>
+        
+          <div class="summary"><p>Return a Time object representing the timestamp encoded into the UUID as UTC time.</p></div>
         
       </li>
     
@@ -385,72 +354,6 @@ a UUID if math is not involved.</p>
 
 
 
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="extra-class-method">
-      <div class="signature">
-        
-        def self.<strong>extra</strong>
-
-        <a class="method-permalink" href="#extra-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="extra=(extra)-class-method">
-      <div class="signature">
-        
-        def self.<strong>extra=</strong>(extra)
-
-        <a class="method-permalink" href="#extra=(extra)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="identifier-class-method">
-      <div class="signature">
-        
-        def self.<strong>identifier</strong>
-
-        <a class="method-permalink" href="#identifier-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="identifier=(identifier)-class-method">
-      <div class="signature">
-        
-        def self.<strong>identifier=</strong>(identifier)
-
-        <a class="method-permalink" href="#identifier=(identifier)-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-
 
 
   <h2>
@@ -462,20 +365,6 @@ a UUID if math is not involved.</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)|String|Nil)-instance-method">
-      <div class="signature">
-        
-        def <strong>initialize_impl</strong>(seconds : Int64, nanoseconds : Int32, identifier : Slice(UInt8) | String | Nil)
-
-        <a class="method-permalink" href="#initialize_impl(seconds:Int64,nanoseconds:Int32,identifier:Slice(UInt8)%7CString%7CNil)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method">
       <div class="signature">
         
@@ -484,45 +373,10 @@ a UUID if math is not involved.</p>
         <a class="method-permalink" href="#seconds_and_nanoseconds:Tuple(Int64,Int32)-instance-method">#</a>
       </div>
       
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="timestamp-instance-method">
-      <div class="signature">
-        
-        def <strong>timestamp</strong>
-
-        <a class="method-permalink" href="#timestamp-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_s-instance-method">
-      <div class="signature">
-        
-        def <strong>to_s</strong>
-
-        <a class="method-permalink" href="#to_s-instance-method">#</a>
-      </div>
-      
         <div class="doc">
           
-            <div class="doc-inherited">
-              Description copied from class Object
-            </div>
-          
-          <p>Returns a string representation of this object.</p>
-
-<p>Descendants must usually <strong>not</strong> override this method. Instead,
-they must override <code>to_s(io)</code>, which must append to the given
-IO object.</p>
+          <p>This returns a tuple containing the seconds since the epoch as well
+as the nanoseconds in the current second for the UUID.</p>
         </div>
       
       <br/>
@@ -531,13 +385,56 @@ IO object.</p>
       </div>
     </div>
   
-    <div class="entry-detail" id="utc-instance-method">
+    <div class="entry-detail" id="timestamp:Time-instance-method">
       <div class="signature">
         
-        def <strong>utc</strong>
+        def <strong>timestamp</strong> : <a href="Time.html">Time</a>
 
-        <a class="method-permalink" href="#utc-instance-method">#</a>
+        <a class="method-permalink" href="#timestamp:Time-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Return a Time object representing the timestamp encoded into the UUID as local time.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s:String-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong> : String
+
+        <a class="method-permalink" href="#to_s:String-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Return the String representation of the UUID.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="utc:Time-instance-method">
+      <div class="signature">
+        
+        def <strong>utc</strong> : <a href="Time.html">Time</a>
+
+        <a class="method-permalink" href="#utc:Time-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Return a Time object representing the timestamp encoded into the UUID as UTC time.</p>
+        </div>
       
       <br/>
       <div>
