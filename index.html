@@ -127,6 +127,8 @@ uuid <span class="o">=</span> <span class="t">CSUUID</span>.<span class="k">new<
 
 uuid <span class="o">=</span> <span class="t">CSUUID</span>.<span class="k">new</span>(seconds: <span class="n">9223372036</span>, nanoseconds: <span class="n">729262400</span>)
 
+uuid <span class="o">=</span> <span class="t">CSUUID</span>.<span class="k">new</span>(identifier: <span class="t">Random</span>.<span class="k">new</span>.random_bytes(<span class="n">6</span>))
+
 dt <span class="o">=</span> <span class="t">ParseDate</span>.parse(<span class="s">&quot;2020/07/29 09:15:37&quot;</span>)
 uuid <span class="o">=</span> <span class="t">CSUUID</span>.<span class="k">new</span>(dt)</code></pre>
 
